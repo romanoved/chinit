@@ -1,4 +1,5 @@
 Usage: ./chinit cmd [cmd_args]
+
 Run cmd in new temporary pid namespace.
 Closing of new namespace (which kills all descendants)
 is guaranteed after normal exit of cmd

@@ -13,7 +13,7 @@
 
 int print_help(const char* exec_name)
 {
-    fprintf(stderr, "Usage: %s cmd [cmd_args]\n", exec_name);
+    fprintf(stderr, "Usage: %s cmd [cmd_args]\n\n", exec_name);
     fprintf(
         stderr,
         "Run cmd in new temporary pid namespace.\n"
