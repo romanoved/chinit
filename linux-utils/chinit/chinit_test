@@ -1,0 +1,21 @@
+#!/bin/bash
+
+./chinit echo  "Test start" >&2 || exit $(echo "Test failed 0" >&2 ; echo 1)
+
+UNIQ_TIME=10.56789
+
+./chinit sleep $UNIQ_TIME &
+
+root_pid=$(echo $!)
+
+sleep .2
+
+pgrep -f $UNIQ_TIME > /dev/null
+
+echo "Terminated message expected... :" >&2
+kill -15 $root_pid || exit $(echo "Test failed 1" >&2 ; echo 1)
+
+sleep .2
+
+pgrep -f $UNIQ_TIME > /dev/null && exit $(echo "Test failed 2" >&2; echo 1) || echo 'Test ok'
+ps aux | grep "sleep $UNIQ_TIME" | grep -v grep || true
