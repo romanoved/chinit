@@ -2,6 +2,7 @@ chinit (1.1) unstable; urgency=medium
 
   * Add --exec option.
   * Fix exit status for abnormal exit.
+  * Add man page.
 
  -- Evgenii Romanov <romanoved@yandex-team.ru>  Tue, 21 Mar 2017 17:19:04 +0300
 
