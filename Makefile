@@ -5,7 +5,7 @@ all: chinit
 	sudo chmod 4755 chinit
 
 chinit: chinit.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(LDFLAGS) -Wall -pedantic -o $@ $<
 
 clean:
 	-rm -f chinit
