@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo chown root:root chinit
+
 chinit="./chinit"
 
 $chinit echo  "Test start" >&2 || exit $(echo "Test failed 0" >&2 ; echo 1)

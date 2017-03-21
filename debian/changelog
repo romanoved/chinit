@@ -1,25 +1,31 @@
+chinit (1.2) stable; urgency=medium
+
+  * Fix Makefile.
+
+ -- Evgeniy Romanov <romanoved@yandex.ru>  Tue, 21 Mar 2017 23:09:02 +0300
+
 chinit (1.1) unstable; urgency=medium
 
   * Add --exec option.
   * Fix exit status for abnormal exit.
   * Add man page.
 
- -- Evgenii Romanov <romanoved@yandex-team.ru>  Tue, 21 Mar 2017 17:19:04 +0300
+ -- Evgenii Romanov <romanoved@yandex.ru>  Tue, 21 Mar 2017 17:19:04 +0300
 
 chinit (1.0) unstable; urgency=medium
 
   * Remount procfs.
 
- -- Evgenii Romanov <romanoved@yandex-team.ru>  Wed, 24 Jun 2015 00:26:44 +0300
+ -- Evgenii Romanov <romanoved@yandex.ru>  Wed, 24 Jun 2015 00:26:44 +0300
 
 chinit (0.9) unstable; urgency=low
 
   * Improve implementation using prctl syscall instead of action on pipe.
 
- -- Evgenii Romanov <romanoved@yandex-team.ru>  Tue, 09 Jun 2015 18:52:14 +0300
+ -- Evgenii Romanov <romanoved@yandex.ru>  Tue, 09 Jun 2015 18:52:14 +0300
 
 chinit (0.8) unstable; urgency=low
 
   * Initial release.
 
- -- Evgenii Romanov <romanoved@yandex-team.ru>  Thu, 18 Dec 2014 01:53:29 +0300
+ -- Evgenii Romanov <romanoved@yandex.ru>  Thu, 18 Dec 2014 01:53:29 +0300
