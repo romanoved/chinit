@@ -67,7 +67,8 @@ void print_help(char* chinit_cmd)
         "Usage: %s [-e | --exec] [command]\n\n"
         "Execute command in new temporary pid namespace.\n\n"
         "Options:\n"
-        "    --exec: do plain exec instead of fork/exec pair (see man page for details);\n"
+        "    -e, --exec: do plain exec instead of fork/exec pair (see man page for details);\n"
+        "    -h, --help: show this help and exit;\n"
         "",
         chinit_cmd
     );
