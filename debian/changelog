@@ -2,7 +2,7 @@ chinit (1.2) stable; urgency=medium
 
   * Fix Makefile.
 
- -- Evgeniy Romanov <romanoved@yandex.ru>  Tue, 21 Mar 2017 23:09:02 +0300
+ -- Evgenii Romanov <romanoved@yandex.ru>  Tue, 21 Mar 2017 23:09:02 +0300
 
 chinit (1.1) unstable; urgency=medium
 
