@@ -1,0 +1,12 @@
+Source: chinit
+Section: utils
+Priority: optional
+Maintainer: Evgeniy Romanov <romanoved@yandex-team.ru>
+Build-Depends: debhelper (>= 9), gcc
+Standards-Version: 3.9.5
+
+Package: chinit
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+Description: chinit utility
+ chinit is a helper to run process in new PID namespace

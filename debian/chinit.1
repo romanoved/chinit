@@ -1,0 +1,88 @@
+.TH CHINIT 1
+
+
+.SH NAME
+chinit - change init (run process in new pid namespace)
+
+
+.SH SYNOPSYS
+.B chinit
+[\fIoptions\fR]
+[\fIcommand\fR]
+
+
+.SH DESCRIPTION
+.B chinit
+executes \fIcommand\fR in new pid namespace;
+see
+.BR  pid_namespace (7)
+for more details.
+Closing of created pid namespace is garanted
+in case of termination of execututed \fIcommand\fR
+or any of auxiliary processes,
+including initially launched one.
+It is guaranteed by kernel
+that all descendant processes will be destroyed.
+
+
+.SH OPTIONS
+.TP
+.BR \-e ", " \-\-exec
+Perform exec to given \fIcommand\fR in 'init' process of new namespace instead of fork/exec pair;
+see
+.BR NOTES
+for details.
+.TP
+.BR \-h ", " \-\-help
+Show short help and exit.
+
+
+.SH EXIT STATUS
+Normally
+.B chinit
+returns exit status of executed command.
+If any of auxiliary processes is killed by a signal,
+it returns the appropriate status (128 + WTERMSIG(status)).
+If internal error occurred, returns EXIT_FAILURE.
+
+
+.SH NOTES
+.B chinit
+works only in case of applicability of PR_SET_PDEATHSIG,
+so its binary must have an appropriate capabilities.
+
+Implementation scheme:
+    root process
+        unshare(CLONE_NEWPID)
+        drop privileges
+        fork
+            waitpid for child process
+    child process ('init' for new pid namespace):
+        set prctl(PR_SET_PDEATHSIG, SIGKILL)
+        with --exec option:
+            execvp(\fIcommand\fR)
+        else:
+            fork
+                waitpid for child process
+        execvp(\fIcommand\fR)
+
+
+The most common cases of unacceptable are:
+    1. running suid binaries (affected to change uid/guid)
+    2. run from thread which dies before process finish
+This cases can be considered as features of exec
+because of PR_SET_PDEATHSIG flag reset.
+
+Since it is difficult to determine if the parent will reset this flag, then by default an additional fork used.
+If \fIcommand\fR does not do anything of the above, is is possible to use --exec flag and save one fork.
+
+
+.SH AUTHOR
+Evgenii D. Romanov <romanoved@yandex.ru>
+
+
+.SH SEE ALSO
+.BR unshare (2),
+.BR prctl (2),
+.BR waitpid (2),
+.BR pid_namespace (7)
