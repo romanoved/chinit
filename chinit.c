@@ -62,43 +62,16 @@ char* get_cmdline(int argc, char* const argv[], int opt_index) {
 
 void print_help(char* chinit_cmd)
 {
-    fprintf(stderr, "Usage: %s cmd [--exec] [cmd_args]\n\n", chinit_cmd);
-
     fprintf(
         stderr,
-        "Run cmd in new temporary pid namespace.\n"
-        "  --exec: do plain exec instead of fork/exec pair (see comments below)\n"
-        "\n"
+        "Usage: %s [-e | --exec] [command]\n\n"
+        "Execute command in new temporary pid namespace.\n\n"
+        "Options:\n"
+        "    --exec: do plain exec instead of fork/exec pair (see man page for details);\n"
+        "",
+        chinit_cmd
     );
 
-    fprintf(
-        stderr,
-        "Closing of new namespace (which kills all descendants)\n"
-        "is guaranteed after normal exit of cmd\n"
-        "or in case of killing any of auxiliary processes\n"
-        "including initially launched process.\n"
-        "\n"
-
-        "It works only in case of applicability of PR_SET_PDEATHSIG.\n"
-        "The most common cases of unacceptable are:\n"
-        "  1. running suid binaries\n"
-        "  2. run from thread which dies before process finish\n"
-        "This cases can be considered as features\n"
-        "\n"
-    );
-
-    fprintf(
-        stderr,
-        "Implementation scheme:\n"
-        "  root process\n"
-        "    unshare(CLONE_NEWPID)\n"
-        "    fork\n"
-        "    waitpid for child process 1\n"
-        "  child process ('init' for new pid namespace):\n"
-        "    drop privileges\n"
-        "    set prctl(PR_SET_PDEATHSIG, SIGKILL)\n"
-        "    execvp or fork+waitpid/execvp pair\n"
-    );
 }
 
 
