@@ -1,7 +1,6 @@
-Usage: chinit [-e | --exec] [command]
+Usage: chinit [options] [command]
 
-chinit exec command in new temporary pid namespace.
-Closing of new namespace (which kills all descendants)
-is guaranteed after normal exit of cmd
-or in case of killing any of auxiliary processes
-including initially launched process.
+chinit is a linux utility that allows to kill a process tree or, in another words, kill all child processes.
+
+More exactly, chinit creates new pid namespace with 'init' process linked with caller.
+If one of auxiliary processes terminated, than 'init' process terminates, so whole process tree terminates by kernel.
