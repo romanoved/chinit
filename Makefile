@@ -14,11 +14,10 @@ install: build
 	ls -lah $(DESTDIR)/usr/sbin/chinit
 
 test: build
-	sudo ./chinit_test # actually, you can skip this
+	-sudo ./chinit_test # actually, you can skip this
 
 clean:
 	-rm -f chinit
 
 chinit: chinit.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -Wall -pedantic -o $@ $<
-

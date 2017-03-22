@@ -28,10 +28,20 @@ that all descendant processes will be destroyed.
 .SH OPTIONS
 .TP
 .BR \-e ", " \-\-exec
-Perform exec to given \fIcommand\fR in 'init' process of new namespace instead of fork/exec pair;
+Perform exec to given \fIcommand\fR in 'init' process of new namespace instead of vfork/exec pair;
 see
 .BR NOTES
 for details.
+.TP
+.BR \-p ", " \-\-proc
+Perform (relatively slow)
+.BR proc (5)
+remount (default for now, but will be changed in future).
+.TP
+.BR \-P ", " \-\-no\-proc
+Do not perform
+.BR proc (5)
+remount.
 .TP
 .BR \-h ", " \-\-help
 Show short help and exit.
@@ -48,24 +58,22 @@ If internal error occurred, returns EXIT_FAILURE.
 
 .SH NOTES
 .B chinit
-works only in case of applicability of PR_SET_PDEATHSIG,
-so its binary must have an appropriate capabilities.
-
 Implementation scheme:
     root process
-        unshare(CLONE_NEWPID)
+        with --no-proc:
+            unshare(CLONE_NEWPID)
+        else
+            unshare(CLONE_NEWPID|CLONE_NEWNS) (slow!)
+        fork -> waitpid for child process
+        remount /proc/, if needed
         drop privileges
-        fork
-            waitpid for child process
     child process ('init' for new pid namespace):
         set prctl(PR_SET_PDEATHSIG, SIGKILL)
         with --exec option:
             execvp(\fIcommand\fR)
         else:
-            fork
-                waitpid for child process
+            vfork -> waitpid for child process
         execvp(\fIcommand\fR)
-
 
 The most common cases of unacceptable are:
     1. running suid binaries (affected to change uid/guid)
@@ -89,4 +97,5 @@ Evgenii D. Romanov <romanoved@yandex.ru>
 .BR unshare (2),
 .BR prctl (2),
 .BR waitpid (2),
+.BR proc (5),
 .BR pid_namespace (7)

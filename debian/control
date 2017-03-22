@@ -9,4 +9,4 @@ Package: chinit
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
 Description: chinit utility
- chinit is a helper to run process in new PID namespace
+ chinit is a helper to run process in new pid namespace
