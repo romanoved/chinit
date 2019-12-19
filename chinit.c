@@ -158,10 +158,10 @@ int main(int argc, char* const argv[]) {
     /* remount proc */
 
     if (is_proc) {
-        if (umount("/proc"))
+        if (mount("none", "/proc", NULL, MS_PRIVATE | MS_REC, NULL))
             return log_exit_failure("failed to unmount old /proc");
 
-        if (mount("proc", "/proc", "proc", 0, NULL))
+        if (mount("proc", "/proc", "proc", MS_NOSUID | MS_NOEXEC | MS_NODEV, NULL))
             return log_exit_failure("failed to mount new /proc");
     }
 
