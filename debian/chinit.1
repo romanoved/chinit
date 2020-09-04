@@ -18,7 +18,7 @@ see
 .BR  pid_namespace (7)
 for more details.
 Closing of created pid namespace is garanted
-in case of termination of execututed \fIcommand\fR
+in cases of termination of execututed \fIcommand\fR
 or any of auxiliary processes,
 including initially launched one.
 It is guaranteed by kernel
@@ -34,14 +34,8 @@ see
 for details.
 .TP
 .BR \-p ", " \-\-proc
-Perform (relatively slow)
-.BR proc (5)
-remount (default for now, but will be changed in future).
-.TP
-.BR \-P ", " \-\-no\-proc
-Do not perform
-.BR proc (5)
-remount.
+Remount
+.BR proc (5).
 .TP
 .BR \-h ", " \-\-help
 Show short help and exit.
@@ -51,42 +45,48 @@ Show short help and exit.
 Normally
 .B chinit
 returns exit status of executed command.
+.br
 If any of auxiliary processes is killed by a signal,
-it returns the appropriate status (128 + WTERMSIG(status)).
+returns the appropriate status (128 + WTERMSIG(status)).
+.br
 If internal error occurred, returns EXIT_FAILURE.
 
 
 .SH NOTES
 .B chinit
-Implementation scheme:
+implementation scheme:
     root process
-        with --no-proc:
-            unshare(CLONE_NEWPID)
+        with \-\-proc:
+            unshare(CLONE_NEWPID|CLONE_NEWNS) (slower!)
         else
-            unshare(CLONE_NEWPID|CLONE_NEWNS) (slow!)
+            unshare(CLONE_NEWPID)
         fork -> waitpid for child process
-        remount /proc/, if needed
+        with \-\-proc:
+            remount /proc/
         drop privileges
     child process ('init' for new pid namespace):
         set prctl(PR_SET_PDEATHSIG, SIGKILL)
         with --exec option:
-            execvp(\fIcommand\fR)
+            execvp(\fIcommand\fR) (unsafe for some commands)
         else:
             vfork -> waitpid for child process
-        execvp(\fIcommand\fR)
+            execvp(\fIcommand\fR)
 
-The most common cases of unacceptable are:
-    1. running suid binaries (affected to change uid/guid)
-    2. run from thread which dies before process finish
-This cases can be considered as features of exec
-because of PR_SET_PDEATHSIG flag reset.
-
-Since it is difficult to determine if the parent will reset this flag, then by default an additional fork used.
-If \fIcommand\fR does not do anything of the above, is is possible to use --exec flag and save one fork.
+According to
+.BR prctl (2),
+PR_SET_PDEATHSIG will be cleared:
+  * for the child of a fork
+  * when executing a set-user-ID or set-group-ID binary
+.br
+Since it is difficult to determine if the parent will reset this flag, then an additional fork used by default.
+.br
+If \fIcommand\fR does not do anything of the above, is is possible to use
+.BR \-\-exec
+flag and save one fork.
 
 
 .SH BUGS
-The best way to report a bug is to create issue in https://github.com/romanoved/chinit/issues.
+The best way to report a bug is to create an issue on https://github.com/romanoved/chinit/issues .
 
 
 .SH AUTHOR
@@ -94,8 +94,10 @@ Evgenii D. Romanov <romanoved@yandex.ru>
 
 
 .SH SEE ALSO
-.BR unshare (2),
 .BR prctl (2),
+.BR unshare (2),
+.BR vfork (2),
 .BR waitpid (2),
+.BR exec (3),
 .BR proc (5),
 .BR pid_namespace (7)

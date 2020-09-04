@@ -76,7 +76,7 @@ void print_help(char* chinit_cmd) {
 
 int main(int argc, char* const argv[]) {
     int is_exec = 0;
-    int is_proc = 1;
+    int is_proc = 0;
 
     if (argc == 1) {
         print_help(*argv);
@@ -89,12 +89,11 @@ int main(int argc, char* const argv[]) {
                 {"help", no_argument, 0, 'h'},
                 {"exec", no_argument, 0, 'e'},
                 {"proc", no_argument, 0, 'p'},
-                {"no-proc", no_argument, 0, 'P'},
                 {0, 0, 0, 0}};
 
         int getopt_rc;
         int option_index = 0;
-        if ((getopt_rc = getopt_long(argc, argv, "+hepP", long_options, &option_index)) == -1)
+        if ((getopt_rc = getopt_long(argc, argv, "+hep", long_options, &option_index)) == -1)
             break;
         switch (getopt_rc) {
             case 'h':
@@ -105,9 +104,6 @@ int main(int argc, char* const argv[]) {
                 break;
             case 'p':
                 is_proc = 1;
-                break;
-            case 'P':
-                is_proc = 0;
                 break;
             case '?':
                 /* getopt_long already printed an error message. */
